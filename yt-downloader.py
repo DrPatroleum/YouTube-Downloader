@@ -4,11 +4,11 @@ from pytube.exceptions import *
 import time
 from moviepy.editor import *
 
-# funkcja do pobierania audio
+# downloading audio function
 
 
 def download_audio(url):
-    print("Trwa pobieranie...")
+    print("Downloading...")
     try:
         start_time = time.time()
         yt = YouTube(url)
@@ -17,56 +17,55 @@ def download_audio(url):
         audio.download(filename=filename)
         end_time = time.time()
         execution_time = end_time - start_time
-        print("Pomyślnie pobrano w czasie", round(execution_time, 2), "sekund")
+        print("Downloaded in", round(execution_time, 2), "seconds")
     except Exception as e:
-        print("Błąd: Nie udało się pobrać pliku audio: ", e)
+        print("Error: Downloading file stopped: ", e)
 
-# funkcja do pobierania wideo
+# downloading video function
 
 
 def download_video(url, resolution):
-    print("Trwa pobieranie...")
+    print("Downloading...")
     try:
         start_time = time.time()
         yt = YouTube(url)
         video = yt.streams.filter(res=resolution, progressive=True).first()
         title = video.title
-        print("Pobieranie wideo w rozdzielczości {}: {}".format(resolution, title))
+        print("Downloading video in resolution {}: {}".format(resolution, title))
         video.download()
         end_time = time.time()
         execution_time = end_time - start_time
-        print("Pomyślnie pobrano w czasie", round(execution_time, 2), "sekund")
+        print("Downloaded in", round(execution_time, 2), "seconds")
     except Exception as e:
-        print("Błąd: Nie udało się pobrać pliku wideo: ", e)
+        print("Error: Downloading file stopped: ", e)
 
-# funkcja do wyświetlania dostępnych rozdzielczości wideo
+# showing video resolution options
 
 
 def show_available_resolutions(url):
     try:
         yt = YouTube(url)
-        print("Dostępne rozdzielczości wideo:")
+        print("Available video resolutions:")
         for stream in yt.streams.filter(progressive=True):
             print(stream.resolution)
     except Exception as e:
-        print("Błąd: Nie udało się pobrać dostępnych rozdzielczości: ", e)
+        print("Error: Downloading video resolutions stopped: ", e)
 
 
 while True:
-    url = input("Podaj URL do filmu na YouTube: ")
+    url = input("Give me a link to the YouTube video: ")
     mode = input(
-        "Wybierz tryb pobierania: \n1# AUDIO\n2# WIDEO\n3# KONIEC\nWybieram: ")
+        "Choose what you want to get: \n1# AUDIO FILE\n2# VIDEO FILE\n3# FINISH PROGRAM\nDecision: ")
     if mode == '1':
         download_audio(url)
         continue
     elif mode == '2':
-        # wyświetlanie dostępnych rozdzielczości wideo
         show_available_resolutions(url)
-        resolution = input("Wybierz rozdzielczość wideo: ")
+        resolution = input("Choose video resolution: ")
         download_video(url, resolution)
         continue
     elif mode == '3':
         break
     else:
-        print("Nieprawidłowy wybór")
+        print("Wrong choice")
         continue
